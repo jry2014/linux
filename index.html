@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <title>LEMP App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f8fa;
+      color: #222;
+      text-align: center;
+      padding-top: 50px;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #0066cc;
+    }
+    .clock {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      display: inline-block;
+      padding: 10px 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>SQL-palvelimen kellonaika</h1>
+
+  <p>Tämä sivu hakee kellonajan MySQL-tietokannasta</p>
+
+  <div class="clock" id="server-time">
+    {{ db_time or 'Ei yhteyttä tietokantaan' }}
+  </div>
+
+  <h2>Reaaliaikainen päivitys</h2>
+  <div class="clock" id="live-time">Ladataan…</div>
+
+  <script>
+    async function fetchTime() {
+      try {
+        const res = await fetch('/time');
+        if (!res.ok) throw new Error('Virhe HTTP ' + res.status);
+        const data = await res.json();
+        if (data.ok) {
+          document.getElementById('live-time').textContent = data.time;
+        } else {
+          document.getElementById('live-time').textContent = 'Virhe tietokannassa';
+        }
+      } catch (err) {
+        document.getElementById('live-time').textContent = 'Virhe: ' + err.message;
+      }
+    }
+    fetchTime();
+    setInterval(fetchTime, 1000);
+  </script>
+</body>
+</html>
