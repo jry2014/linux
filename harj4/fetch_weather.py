@@ -2,7 +2,6 @@
 import requests
 import mysql.connector
 from datetime import datetime
-API_KEY = '8b349fb73e10839d6fb33410b5e42962'
 CITY = 'Oulu'
 URL =f'https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric'
 conn = mysql.connector.connect(host='localhost', user='ubuntu',
